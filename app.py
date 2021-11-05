@@ -45,5 +45,21 @@ def post(postid:int):
     return render_template('post.html', post=cur_post, comments=cur_comments, marked=marked)
 
 
+@app.route('/search/', methods=['GET'])
+def search_get():
+    search_request = request.args.get("s")
+    found_posts = []
+    search=False
+    comments = read_json('data/comments.json')
+    if search_request:
+        search = True
+        data = read_json('data/data.json')
+        for post in data:
+            if search_request.casefold() in post['content'].casefold():
+                found_posts.append(post)
+    return render_template('search.html', found_posts=found_posts[0:10], search=search, comments=comments)
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
