@@ -49,16 +49,18 @@ def post(postid:int):
 def search_get():
     search_request = request.args.get("s")
     found_posts = []
-    search=False
+    search = False
     comments = read_json('data/comments.json')
+    bookmarks = read_json('data/bookmarks.json')
     if search_request:
         search = True
         data = read_json('data/data.json')
         for post in data:
             if search_request.casefold() in post['content'].casefold():
                 found_posts.append(post)
-    return render_template('search.html', found_posts=found_posts[0:10], search=search, comments=comments)
 
+    return render_template('search.html', found_posts=found_posts[0:10],
+                           search=search, comments=comments, bookmarks=bookmarks)
 
 
 if __name__ == '__main__':
