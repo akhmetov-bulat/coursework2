@@ -12,6 +12,10 @@ def read_json(filename):
         return json.loads(raw_json)
 
 
+def write_json(filename,json_data):
+    with open(filename, 'w', encoding='utf-8',) as f:
+        json.dump(json_data, f, ensure_ascii=False, indent='\t')
+
 @app.route('/')
 def index():
     data = read_json('data/data.json')
@@ -27,9 +31,12 @@ def post(postid:int):
     cur_comments = []
     bookmarks = read_json('data/bookmarks.json')
     marked = False
-    for post in data:
-        if postid == posts["pk"]:
-            cur_post = post
+    for index in range(len(data)):
+        if data[index]['pk'] == postid:
+            data[index]["views_count"] = data[index]["views_count"] + 1
+            cur_post = data[index]
+            break
+    write_json('data/data.json', data)
     for comment in all_comments:
         if postid == comment["post_id"]:
             cur_comments.append(comment)
