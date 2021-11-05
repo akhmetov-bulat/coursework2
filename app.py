@@ -58,9 +58,21 @@ def search_get():
         for post in data:
             if search_request.casefold() in post['content'].casefold():
                 found_posts.append(post)
-
     return render_template('search.html', found_posts=found_posts[0:10],
                            search=search, comments=comments, bookmarks=bookmarks)
+
+
+@app.route('/users/<username>')
+def user_posts(username):
+    users_posts = []
+    comments = read_json('data/comments.json')
+    bookmarks = read_json('data/bookmarks.json')
+    data = read_json('data/data.json')
+    for post in data:
+        if post['poster_name'] == username:
+            users_posts.append(post)
+    return render_template('user-feed.html', users_posts=users_posts, comments=comments, bookmarks=bookmarks)
+
 
 
 if __name__ == '__main__':
