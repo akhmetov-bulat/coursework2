@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request, Response
+from flask import Flask, request, Response, render_template
 
 app = Flask(__name__)
 
@@ -14,10 +14,10 @@ def read_json(filename):
 
 @app.route('/')
 def index():
-    data = read_json('data.json')
-    comments = read_json('comments.json')
-    bookmarks = read_json('bookmarks.json')
-
+    data = read_json('data/data.json')
+    comments = read_json('data/comments.json')
+    bookmarks = read_json('data/bookmarks.json')
+    return render_template('index.html',bookmarks = bookmarks, data = data, comments = comments)
 
 
 
