@@ -34,11 +34,11 @@
             <span class="item__username">{{post['poster_name']}}</span>
           </a>
           {% if marked %}
-          <button type="button" class="item__bookmark-btn active">
+          <button onclick="location.href='/bookmarks/remove/{{post['pk']}}'" type="button" class="item__bookmark-btn active">
             <img src="/static/img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
           </button>
           {% else %}
-          <button type="button" class="item__bookmark-btn">
+          <button onclick="location.href='/bookmarks/add/{{post['pk']}}'" type="button" class="item__bookmark-btn">
             <img src="/static/img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
           </button>
           {% endif %}

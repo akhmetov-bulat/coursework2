@@ -1,5 +1,5 @@
 from utils import read_json, write_json
-from flask import Flask, request, Response, render_template
+from flask import Flask, request, Response, render_template, redirect
 
 app = Flask(__name__)
 
@@ -73,6 +73,38 @@ def tag_posts(tagname):
         if tagname in post['content']:
             tags_posts.append(post)
     return render_template('tag.html', tags_posts=tags_posts, comments=comments, bookmarks=bookmarks)
+
+
+@app.route('/bookmarks')
+def bookmarks_posts():
+    bookmarked_posts = []
+    comments = read_json('data/comments.json')
+    bookmarks = read_json('data/bookmarks.json')
+    data = read_json('data/data.json')
+    for post in data:
+        if post['pk'] in bookmarks:
+            bookmarked_posts.append(post)
+    return render_template('bookmarks.html', bookmarked_posts=bookmarked_posts, comments=comments, bookmarks=bookmarks)
+
+
+@app.route('/bookmarks/add/<int:postid>')
+def add_bookmark(postid:int):
+    bookmarks = read_json('data/bookmarks.json')
+    if postid not in bookmarks:
+        bookmarks.append(postid)
+    write_json('data/bookmarks.json', bookmarks)
+    # print(request.environ.get('HTTP_REFERER', request.remote_addr))
+    return redirect(request.environ.get('HTTP_REFERER', request.remote_addr), code=302)
+
+
+@app.route('/bookmarks/remove/<int:postid>')
+def remove_bookmark(postid:int):
+    bookmarks = read_json('data/bookmarks.json')
+    if postid in bookmarks:
+        bookmarks.remove(postid)
+    write_json('data/bookmarks.json', bookmarks)
+    # print(request.environ.get('HTTP_REFERER', request.remote_addr))
+    return redirect(request.environ.get('HTTP_REFERER', request.remote_addr), code=302)
 
 
 if __name__ == '__main__':
