@@ -62,6 +62,18 @@ def user_posts(username):
     return render_template('user-feed.html', users_posts=users_posts, comments=comments, bookmarks=bookmarks)
 
 
+@app.route('/tag/<tagname>')
+def tag_posts(tagname):
+    tagname = "#" + tagname
+    tags_posts = []
+    comments = read_json('data/comments.json')
+    bookmarks = read_json('data/bookmarks.json')
+    data = read_json('data/data.json')
+    for post in data:
+        if tagname in post['content']:
+            tags_posts.append(post)
+    return render_template('tag.html', tags_posts=tags_posts, comments=comments, bookmarks=bookmarks)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

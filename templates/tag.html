@@ -26,85 +26,58 @@
   <main class="container">
     <section class="items">
       <div class="items__item item">
+        {% for post in tags_posts %}
         <div class="item__top">
           <a href="/users/{{post['poster_name']}}" class="item__head">
             <div class="item__ava-wrap">
-              <img src="img/ava1.png" alt="" class="item__ava" width="47">
+              <img src={{post['poster_avatar']}} alt="" class="item__ava" width="47">
             </div>
-            <span class="item__username">Username</span>
+            <span class="item__username">{{post['poster_name']}}</span>
           </a>
         </div>
-        <a href="/post.html" class="item__post-link">
-          <img src="img/post4.jpg" alt="" width="348" class="item__post-img">
+        <a href="/posts/{{post['pk']}}" class="item__post-link">
+          <img src={{post['pic']}} alt="" width="348" class="item__post-img">
         </a>
-        <p class="item__descr"><a href="/tag.html" class="item__tag">#food</a> Текст описания коротки...</p>
+        {% set tag = namespace(value=[]) %}
+        {% set text = post["content"].split(" ") %}
+        {% for i in range (text|length - 1, 0, -1) %}
+        {% if text[i][0] == "#" %}
+        {% set tag.value = tag.value + [text.pop(i)] %}
+        {% endif %}
+        {% endfor %}
+        {% set content = text|join(" ") %}
+        <p class="item__descr">{{content|truncate(47)}}</p>
+        <p class="item__descr">
+          {% for hashtag in tag.value %}
+        <a href="/tag/{{hashtag}}">{{hashtag}}</a>
+        {% endfor%}
+        </p>
         <div class="item__post-info">
-          <p class="item__comments-counter">13 комментариев</p>
+           {% set count = namespace(value=0) %}
+          {% for comment in comments %}
+          {% if comment["post_id"] == post['pk'] %}
+          {% set count.value = count.value + 1 %}
+          {% endif %}
+          {% endfor %}
+          <p class="item__comments-counter">{{count.value}} комментариев</p>
           <div class="item__counter">
-            <img src="img/eye.png" alt="" class="item__counter-icon" width="26">
+            <img src="/static/img/eye.png" alt="" class="item__counter-icon" width="26">
             <span class="item__counter-text">212</span>
           </div>
         </div>
         <div class="item__post-bottom">
-          <a href="/post.html" class="item__btn-more">Подробнее</a>
-          <button type="button" class="item__bookmark-btn">
-            <img src="img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
-          </button>
-        </div>
-      </div>
-      <div class="items__item item">
-        <div class="item__top">
-          <a href="/user-feed.html" class="item__head">
-            <div class="item__ava-wrap">
-              <img src="img/ava2.png" alt="" class="item__ava" width="47">
-            </div>
-            <span class="item__username">Username</span>
-          </a>
-        </div>
-        <a href="/post.html" class="item__post-link">
-          <img src="img/post2.jpg" alt="" width="348" class="item__post-img">
-        </a>
-        <p class="item__descr"><a href="/tag.html" class="item__tag">#food</a> Текст описания коротки...</p>
-        <div class="item__post-info">
-          <p class="item__comments-counter">Нет комментариев</p>
-          <div class="item__counter">
-            <img src="img/eye.png" alt="" class="item__counter-icon" width="26">
-            <span class="item__counter-text">1023</span>
-          </div>
-        </div>
-        <div class="item__post-bottom">
-          <a href="/post.html" class="item__btn-more">Подробнее</a>
+          <a href="/posts/{{post['pk']}}" class="item__btn-more">Подробнее</a>
+          {% if post['pk'] in bookmarks %}
           <button type="button" class="item__bookmark-btn active">
-            <img src="img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
+            <img src="/static/img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
           </button>
-        </div>
-      </div>
-      <div class="items__item item">
-        <div class="item__top">
-          <a href="/user-feed.html" class="item__head">
-            <div class="item__ava-wrap">
-              <img src="img/ava2.png" alt="" class="item__ava" width="47">
-            </div>
-            <span class="item__username">Username</span>
-          </a>
-        </div>
-        <a href="/post.html" class="item__post-link">
-          <img src="img/post3.jpg" alt="" width="348" class="item__post-img">
-        </a>
-        <p class="item__descr"><a href="/tag.html" class="item__tag">#food</a> Текст описания коротки...</p>
-        <div class="item__post-info">
-          <p class="item__comments-counter">5 комментариев</p>
-          <div class="item__counter">
-            <img src="img/eye.png" alt="" class="item__counter-icon" width="26">
-            <span class="item__counter-text">1023</span>
-          </div>
-        </div>
-        <div class="item__post-bottom">
-          <a href="/post.html" class="item__btn-more">Подробнее</a>
+          {% else %}
           <button type="button" class="item__bookmark-btn">
-            <img src="img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
+            <img src="/static/img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
           </button>
+          {% endif %}
         </div>
+        {% endfor %}
       </div>
     </section>
   </main>

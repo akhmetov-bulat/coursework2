@@ -55,7 +55,19 @@
           {% set count.value = count.value + 1 %}
           {% endif %}
           {% endfor %}
-          <p class="item__comments-counter">{{count.value}} комментариев</p>
+          {% set tag = namespace(value=[]) %}
+        {% set text = post["content"].split(" ") %}
+        {% for i in range (text|length - 1, 0, -1) %}
+        {% if text[i][0] == "#" %}
+        {% set tag.value = tag.value + [text.pop(i)] %}
+        {% endif %}
+        {% endfor %}
+        {% set content = text|join(" ") %}
+        <p class="item__descr">{{content|truncate(47)}}</p>
+        <p class="item__descr">
+          {% for hashtag in tag.value %}
+        <a href="/tag/{{hashtag}}">{{hashtag}}</a>
+        {% endfor%}
           <div class="item__counter">
             <img src="/static/img/eye.png" alt="" class="item__counter-icon" width="26">
             <span class="item__counter-text">212</span>

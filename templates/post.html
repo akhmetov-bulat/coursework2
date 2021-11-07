@@ -46,9 +46,23 @@
         <a href="" class="item__post-link">
           <img src={{post['pic']}} alt="" width="348" class="item__post-img">
         </a>
+        {% set count = namespace(value=0) %}
+          {% for comment in comments %}
+          {% if comment["post_id"] == post['pk'] %}
+          {% set count.value = count.value + 1 %}
+          {% endif %}
+          {% endfor %}
+          {% set tag = namespace(value=[]) %}
+        {% set text = post["content"].split(" ") %}
+        {% for i in range (text|length - 1, 0, -1) %}
+        {% if text[i][0] == "#" %}
+        {% set tag.value = tag.value + [text.pop(i)] %}
+        {% endif %}
+        {% endfor %}
+        {% set content = text|join(" ") %}
         <div class="item__descr">
           <p class="item__text">
-            {{post['content']}}
+            {{content}}
           </p>
           </div>
         <div class="item__bottom">
