@@ -38,6 +38,7 @@
           <img src="{{post['pic']}}" alt="" width="348" class="item__post-img">
         </a>
         <p class="item__descr">{{post["content"]|truncate(30)}}...</p>
+
         <div class="item__post-info">
           {% set count = namespace(value=0) %}
           {% for comment in comments %}
