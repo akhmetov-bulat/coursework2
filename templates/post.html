@@ -35,13 +35,11 @@
           </a>
           {% if marked %}
           <button onclick="location.href='/bookmarks/remove/{{post['pk']}}'" type="button" class="item__bookmark-btn active">
-            <img src="/static/img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
-          </button>
           {% else %}
           <button onclick="location.href='/bookmarks/add/{{post['pk']}}'" type="button" class="item__bookmark-btn">
+          {% endif %}
             <img src="/static/img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
           </button>
-          {% endif %}
         </div>
         <a href="" class="item__post-link">
           <img src={{post['pic']}} alt="" width="348" class="item__post-img">
@@ -65,6 +63,11 @@
             {{content}}
           </p>
           </div>
+        <p class="item__descr">
+          {% for hashtag in tag.value %}
+        <a href="/tag/{{hashtag[1:]}}">{{hashtag}}</a>
+        {% endfor%}
+        </p>
         <div class="item__bottom">
           <div class="item__post-info">
             <p class="item__comments-counter">{{comments|length}} комментария</p>

@@ -49,7 +49,7 @@
         <p class="item__descr">{{content|truncate(47)}}</p>
         <p class="item__descr">
           {% for hashtag in tag.value %}
-          <a href="/tag/{{hashtag}}">{{hashtag}}</a>
+          <a href="/tag/{{hashtag[1:]}}">{{hashtag}}</a>
         {% endfor%}</p>
         <div class="item__post-info">
           {% set count = namespace(value=0) %}
