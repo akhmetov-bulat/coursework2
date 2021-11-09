@@ -44,33 +44,19 @@
         <a href="" class="item__post-link">
           <img src={{post['pic']}} alt="" width="348" class="item__post-img">
         </a>
-        {% set count = namespace(value=0) %}
-          {% for comment in comments %}
-          {% if comment["post_id"] == post['pk'] %}
-          {% set count.value = count.value + 1 %}
-          {% endif %}
-          {% endfor %}
-          {% set tag = namespace(value=[]) %}
-        {% set text = post["content"].split(" ") %}
-        {% for i in range (text|length - 1, 0, -1) %}
-        {% if text[i][0] == "#" %}
-        {% set tag.value = tag.value + [text.pop(i)] %}
-        {% endif %}
-        {% endfor %}
-        {% set content = text|join(" ") %}
         <div class="item__descr">
           <p class="item__text">
-            {{content}}
+            {{post['content']}}
           </p>
           </div>
         <p class="item__descr">
-          {% for hashtag in tag.value %}
+          {% for hashtag in post['hashtags'] %}
         <a href="/tag/{{hashtag[1:]}}">{{hashtag}}</a>
         {% endfor%}
         </p>
         <div class="item__bottom">
           <div class="item__post-info">
-            <p class="item__comments-counter">{{comments|length}} комментария</p>
+            <p class="item__comments-counter">{{post['comments_count']}} комментария</p>
             <div class="item__counter">
               <img src="/static/img/eye.png" alt="" class="item__counter-icon" width="26">
               <span class="item__counter-text">{{post['views_count']}}</span>

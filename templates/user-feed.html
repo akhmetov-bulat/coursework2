@@ -25,7 +25,7 @@
   </header>
   <main class="container">
     <section class="items">
-      {% for post in users_posts %}
+      {% for post in posts %}
       <div class="items__item item">
         <div class="item__top">
           <a href="/users/{{post['poster_name']}}" class="item__head">
@@ -38,27 +38,16 @@
         <a href="/posts/{{post['pk']}}" class="item__post-link">
           <img src="{{post['pic']}}" alt="" width="348" class="item__post-img">
         </a>
-        {% set tag = namespace(value=[]) %}
-        {% set text = post["content"].split(" ") %}
-        {% for i in range (text|length - 1, 0, -1) %}
-        {% if text[i][0] == "#" %}
-        {% set tag.value = tag.value + [text.pop(i)] %}
-        {% endif %}
-        {% endfor %}
-        {% set content = text|join(" ") %}
-        <p class="item__descr">{{content|truncate(47)}}</p>
+        <p class="item__descr">{{post["content"]|truncate(47)}}</p>
         <p class="item__descr">
-          {% for hashtag in tag.value %}
-          <a href="/tag/{{hashtag[1:]}}">{{hashtag}}</a>
-        {% endfor%}</p>
-        <div class="item__post-info">
-          {% set count = namespace(value=0) %}
-          {% for comment in comments %}
-          {% if comment["post_id"] == post['pk'] %}
-          {% set count.value = count.value + 1 %}
+          {% if post["hashtags"] %}
+          {% for hashtag in post["hashtags"] %}
+            <a href="/tag/{{hashtag[1:]}}">{{hashtag}}</a>
+          {% endfor%}
           {% endif %}
-          {% endfor %}
-          <p class="item__comments-counter">{{count.value}} комментариев</p>
+        </p>
+        <div class="item__post-info">
+          <p class="item__comments-counter">{{post['comments_count']}} комментариев</p>
           <div class="item__counter">
             <img src="/static/img/eye.png" alt="" class="item__counter-icon" width="26">
             <span class="item__counter-text">{{post["views_count"]}}</span>
@@ -66,15 +55,13 @@
         </div>
         <div class="item__post-bottom">
           <a href="/posts/{{post['pk']}}" class="item__btn-more">Подробнее</a>
-          {% if post['pk'] in bookmarks %}
+          {% if post["marked"] %}
           <button onclick="location.href='/bookmarks/remove/{{post['pk']}}'" type="button" class="item__bookmark-btn active">
-            <img src="/static/img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
-          </button>
           {% else %}
           <button onclick="location.href='/bookmarks/add/{{post['pk']}}'" type="button" class="item__bookmark-btn">
+          {% endif %}
             <img src="/static/img/bookmark.png" alt="" class="item__bookmark-icon" width="24">
           </button>
-          {% endif %}
         </div>
       </div>
       {% endfor %}
